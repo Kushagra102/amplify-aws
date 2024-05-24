@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Auth from "@/components/auth/Auth";
+import "../globals.css";
+import NavBar from "@/components/NavBar";
+import { getAuthenticatedUser } from "@/utils/amplify-utils";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,10 +17,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Auth>{children}</Auth>
-      </body>
-    </html>
+    <section>
+      <NavBar authUser={await getAuthenticatedUser()} isLandingPage={false} />
+      {children}
+    </section>
   );
 }

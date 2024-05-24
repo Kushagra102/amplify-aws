@@ -7,33 +7,41 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Post: a
+  User: a
     .model({
-      title: a.string().required(),
-      comments: a.hasMany("Comment", "commentId"),
-      owner: a
-        .string()
-        .authorization((allow) => allow.owner().to(["read", "delete"])),
+      username: a.string(),
+      email: a.string(),
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),
       allow.owner(),
     ]),
-  Comment: a
+  Community: a
     .model({
-      commentId: a.id(),
-      content: a.string().required(),
-      post: a.belongsTo("Post", "commentId"),
-      owner: a
-        .string()
-        .authorization((allow) => allow.owner().to(["read", "delete"])),
+      name: a.string(),
+      description: a.string(),
+      announcements: a.hasMany("Announcement", "communityId"),
+      banner: a.string(),
+    })
+    .authorization((allow) => [
+      allow.publicApiKey().to(["read"]),
+      allow.owner(),
+    ]),
+  Announcement: a
+    .model({
+      announcementId: a.id(),
+      title: a.string(),
+      content: a.string(),
+      likeCount: a.integer(),
+      tags: a.string(),
+      communityId: a.id(),
+      community: a.belongsTo("Community", "communityId"),
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),
       allow.owner(),
     ]),
 });
-
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({

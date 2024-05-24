@@ -15,15 +15,16 @@ export const { runWithAmplifyServerContext } = createServerRunner({
   config,
 });
 
-export const isAuthenticated = async () =>
-  await runWithAmplifyServerContext({
+export const getAuthenticatedUser = async () => {
+  return await runWithAmplifyServerContext({
     nextServerContext: { cookies },
     async operation(contextSpec) {
       try {
         const user = await getCurrentUser(contextSpec);
-        return !!user;
+        return user;
       } catch (error) {
-        return false;
+        return null;
       }
     },
   });
+};

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import {Authenticator} from "@aws-amplify/ui-react"
+import { Authenticator } from "@aws-amplify/ui-react";
 
 const AuthClient = () => {
-    return <Authenticator/>
-}
+  return <Authenticator signUpAttributes={["name", "preferred_username"]} />;
+};
 
-export default AuthClient
+export default AuthClient;
