@@ -1,6 +1,8 @@
 "use server";
-import { cookieBasedClient } from "@/utils/amplify-utils";
+import { cookieBasedClient, getAuthenticatedUser } from "@/utils/amplify-utils";
 import { Schema } from "../../../amplify/data/resource";
+import { redirect } from "next/navigation";
+
 
 export const getAllCommunities = async (payload: {
   name: Schema["Community"]["type"]["name"];
@@ -39,3 +41,29 @@ export const getAllCommunities = async (payload: {
 
   return data.data;
 };
+
+export const createCommunity = async (payload: {
+  name: Schema["Community"]["type"]["name"];
+  description: Schema["Community"]["type"]["description"];
+  banner: Schema["Community"]["type"]["banner"];
+}) => {
+  const {data} = await cookieBasedClient.models.Community.create({
+    name: payload.name,
+    description: payload.description,
+    banner: payload.banner,
+  });
+
+  console.log(data);
+  redirect("/community");
+};
+
+export const fetchAuthenticatedUser = async () => {
+  try {
+    const data = await getAuthenticatedUser()
+    console.log(data);
+    return data;
+  } catch (error) {
+    return null;
+  }
+
+}
