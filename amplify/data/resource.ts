@@ -11,17 +11,32 @@ const schema = a.schema({
     .model({
       username: a.string(),
       email: a.string(),
+
+      communities: a.hasMany("UserCommunity", "userId"),
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),
       allow.owner(),
     ]),
+  UserCommunity: a
+    .model({
+      userId: a.id(),
+      communityId: a.id(),
+
+      user: a.belongsTo("User", "userId"),
+      community: a.belongsTo("Community", "communityId"),
+    })
+    .authorization((allow) => {
+      return [allow.publicApiKey().to(["read"]), allow.owner()];
+    }),
   Community: a
     .model({
       name: a.string(),
       description: a.string(),
       announcements: a.hasMany("Announcement", "communityId"),
       banner: a.string(),
+
+      users: a.hasMany("UserCommunity", "communityId"),
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["read"]),

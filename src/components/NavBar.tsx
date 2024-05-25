@@ -3,7 +3,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, Divider, Flex, Heading, Image } from "@aws-amplify/ui-react";
-import { AuthUser, signOut } from "aws-amplify/auth";
+import {
+  AuthUser,
+  fetchUserAttributes,
+  FetchUserAttributesOutput,
+  signOut,
+} from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { Hub } from "aws-amplify/utils";
 import { useTransition } from "react";
@@ -18,6 +23,7 @@ export default function NavBar({
 }) {
   const [authCheck, setAuthCheck] = useState(!!authUser);
   const [isPending, startTransition] = useTransition();
+  const [username, setUsername] = useState<string | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -38,6 +44,19 @@ export default function NavBar({
 
     return () => hubListenerCancel();
   }, [router]);
+
+  useEffect(() => {
+    const fetchUserAttributes_ = async () => {
+      if (authCheck) {
+        const userAttributes = await fetchUserAttributes();
+        setUsername(userAttributes.preferred_username as string | null);
+      }
+    };
+
+    fetchUserAttributes_();
+
+    return () => setUsername(null);
+  }, [authCheck]);
 
   const signOutSignIn = async () => {
     if (authCheck) {
@@ -75,9 +94,7 @@ export default function NavBar({
               ))}
             </Flex>
             <p className="w-fit">
-              {authCheck
-                ? `Welcome, ${authUser?.username.substring(0, 8)}...`
-                : "Welcome"}
+              {username ? `Welcome, ${username}...` : "Welcome"}
             </p>
             <Button
               variation="primary"
