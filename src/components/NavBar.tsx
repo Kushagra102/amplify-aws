@@ -69,7 +69,14 @@ export default function NavBar({
     href: string;
     label: string;
     loggedIn?: boolean;
-  }[] = [];
+  }[] = [
+    { href: "/community", label: "View Community", loggedIn: true },
+    {
+      href: "/community-create",
+      label: "Create Community",
+      loggedIn: true,
+    },
+  ];
 
   const routes = defaultRoutes.filter(
     (route) => route.loggedIn === authCheck || route.loggedIn === undefined
@@ -78,21 +85,38 @@ export default function NavBar({
   return (
     <>
       <Flex
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        padding={"1rem"}
+        direction={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
       >
-        <Image src={logo.src} alt="Logo" height="70px" />
+        <Flex
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={"1rem"}
+          width={"fit-content"}
+        >
+          <Image src={logo.src} alt="Logo" height="70px" />
+          <Flex as="nav" alignItems="center" gap="3rem" margin="0 2rem">
+            {routes.map((route) => (
+              <Link
+                className="p-2 rounded-md text-[#047D95] font-semibold"
+                key={route.href}
+                href={route.href}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </Flex>
+        </Flex>
         {!isLandingPage && (
-          <>
-            <Flex as="nav" alignItems="center" gap="3rem" margin="0 2rem">
-              {routes.map((route) => (
-                <Link key={route.href} href={route.href}>
-                  {route.label}
-                </Link>
-              ))}
-            </Flex>
+          <Flex
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            padding={"1rem"}
+            width={"fit-content"}
+          >
             <p className="w-fit">
               {username ? `Welcome, ${username}...` : "Welcome"}
             </p>
@@ -104,7 +128,7 @@ export default function NavBar({
             >
               {authCheck ? "Sign Out" : "Sign In"}
             </Button>
-          </>
+          </Flex>
         )}
       </Flex>
       <Divider size="small"></Divider>

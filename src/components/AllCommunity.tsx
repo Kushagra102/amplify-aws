@@ -2,7 +2,6 @@
 import { Card, Flex, Grid, Heading, SearchField } from "@aws-amplify/ui-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { Schema } from "../../amplify/data/resource";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { StorageImage } from "@aws-amplify/ui-react-storage";
 
@@ -86,6 +85,7 @@ const AllCommunity = ({
               key={community.id}
               padding={"10px"}
               border={"1px solid #ddd"}
+              className="cursor-pointer"
               borderRadius={"5px"}
               margin={"10px"}
               width={"fit-content"}
