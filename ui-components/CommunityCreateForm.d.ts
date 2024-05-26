@@ -18,12 +18,12 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type CommunityCreateFormInputValues = {
     name?: string;
     description?: string;
-    banner?: string;
+    banner?: File | string | null;
 };
 export declare type CommunityCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
-    banner?: ValidationFunction<string>;
+    banner?: ValidationFunction<File | string | null>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CommunityCreateFormOverridesProps = {

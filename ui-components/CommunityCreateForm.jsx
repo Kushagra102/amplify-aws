@@ -31,7 +31,7 @@ export default function CommunityCreateForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
-    setBanner(initialValues.banner);
+    setBanner(null);
     setErrors({});
   };
   const validations = {
@@ -177,22 +177,22 @@ export default function CommunityCreateForm(props) {
         label="Banner"
         isRequired={false}
         isReadOnly={false}
-        value={banner}
+        // value={banner}
         onChange={(e) => {
-          let { value } = e.target;
+          let file = e.target.files.item(0);
           if (onChange) {
             const modelFields = {
               name,
               description,
-              banner: value,
+              banner: file,
             };
             const result = onChange(modelFields);
-            value = result?.banner ?? value;
+            file = result?.banner ?? file;
           }
           if (errors.banner?.hasError) {
-            runValidationTasks("banner", value);
+            runValidationTasks("banner", file);
           }
-          setBanner(value);
+          setBanner(file);
         }}
         onBlur={() => runValidationTasks("banner", banner)}
         errorMessage={errors.banner?.errorMessage}

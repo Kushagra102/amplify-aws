@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Schema } from "../../amplify/data/resource";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { StorageImage } from "@aws-amplify/ui-react-storage";
 
 const AllCommunity = ({
   getAllCommunities,
@@ -88,16 +89,14 @@ const AllCommunity = ({
               borderRadius={"5px"}
               margin={"10px"}
               width={"fit-content"}
+              maxWidth={"450px"}
             >
-              <Image
-                src={
-                  community.banner! ||
-                  "https://3dc.opensutd.org/imgs/banner.jpg"
-                }
-                alt={community.name!}
-                width={400}
-                height={10}
-              />
+              <div className="w-[400px] max-w-[400px]">
+                <StorageImage
+                  alt={`banner ${community.name}`}
+                  path={community!.banner!}
+                />
+              </div>
               <Heading level={3}>{community.name}</Heading>
               <p>{community.description}</p>
               <p>Owner: {community.owner}</p>
