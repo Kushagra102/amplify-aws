@@ -41,6 +41,22 @@ export const getAllCommunities = async (payload: {
   return data.data;
 };
 
+export const getCommunityById = async (payload: {
+  id: Schema["Community"]["type"]["id"];
+}) => {
+  const data = await cookieBasedClient.models.Community.list({
+    filter: {
+      id: {
+        eq: payload.id,
+      },
+    },
+    selectionSet: ["name", "id", "description", "owner", "banner", "createdAt"],
+    authMode: "userPool",
+  });
+
+  return data.data[0];
+};
+
 export const createCommunity = async (payload: {
   name: Schema["Community"]["type"]["name"];
   description: Schema["Community"]["type"]["description"];
@@ -54,6 +70,22 @@ export const createCommunity = async (payload: {
 
   console.log(data);
   redirect("/community");
+};
+
+export const updateCommunity = async (payload: {
+  id: Schema["Community"]["type"]["id"];
+  name: Schema["Community"]["type"]["name"];
+  description: Schema["Community"]["type"]["description"];
+  banner: Schema["Community"]["type"]["banner"];
+}) => {
+  const { data } = await cookieBasedClient.models.Community.update({
+    id: payload.id,
+    name: payload.name,
+    description: payload.description,
+    banner: payload.banner,
+  });
+
+  console.log(data);
 };
 
 export const isUserPartOfCommunity = async (payload: {
@@ -80,18 +112,13 @@ export const isUserTheOwnerOfCommunity = async (payload: {
   communityId: Schema["Community"]["type"]["id"];
 }) => {
   const data = await cookieBasedClient.models.Community.list({
-    authMode: "apiKey",
-    filter: {
-      id: {
-        eq: payload.communityId,
-      },
-      owner: {
-        eq: payload.userId,
-      },
-    },
+    authMode: "userPool",
   });
-
-  return data.data.length > 0;
+  data.data = data.data.filter(
+    (community) =>
+      community.owner === payload.userId && community.id === payload.communityId
+  );
+  return data.data.length > 0 ? true : false;
 };
 
 export const fetchAuthenticatedUser = async () => {
