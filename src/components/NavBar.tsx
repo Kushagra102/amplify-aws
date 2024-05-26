@@ -2,17 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, Divider, Flex, Heading, Image } from "@aws-amplify/ui-react";
-import {
-  AuthUser,
-  fetchUserAttributes,
-  FetchUserAttributesOutput,
-  signOut,
-} from "aws-amplify/auth";
+import { Button, Divider, Flex, Image } from "@aws-amplify/ui-react";
+import { AuthUser, fetchUserAttributes, signOut } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { Hub } from "aws-amplify/utils";
 import { useTransition } from "react";
 import logo from "../images/logo.png";
+import { FaRegUser } from "react-icons/fa";
 
 export default function NavBar({
   authUser,
@@ -23,7 +19,7 @@ export default function NavBar({
 }) {
   const [authCheck, setAuthCheck] = useState(!!authUser);
   const [isPending, startTransition] = useTransition();
-  const [username, setUsername] = useState<string | null>(null);
+  // const [username, setUsername] = useState<string | null>(null);
 
   const router = useRouter();
   useEffect(() => {
@@ -45,18 +41,18 @@ export default function NavBar({
     return () => hubListenerCancel();
   }, [router]);
 
-  useEffect(() => {
-    const fetchUserAttributes_ = async () => {
-      if (authCheck) {
-        const userAttributes = await fetchUserAttributes();
-        setUsername(userAttributes.preferred_username as string | null);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserAttributes_ = async () => {
+  //     if (authCheck) {
+  //       const userAttributes = await fetchUserAttributes();
+  //       setUsername(userAttributes.preferred_username as string | null);
+  //     }
+  //   };
 
-    fetchUserAttributes_();
+  //   fetchUserAttributes_();
 
-    return () => setUsername(null);
-  }, [authCheck]);
+  //   return () => setUsername(null);
+  // }, [authCheck]);
 
   const signOutSignIn = async () => {
     if (authCheck) {
@@ -117,9 +113,14 @@ export default function NavBar({
             padding={"1rem"}
             width={"fit-content"}
           >
-            <p className="w-fit">
-              {username ? `Welcome, ${username}...` : "Welcome"}
-            </p>
+            {/* <span className="text-lg font-semibold">{username}</span> */}
+            <FaRegUser
+              onClick={() => {
+                router.push("/profile");
+              }}
+              size="2rem"
+              className="cursor-pointer"
+            />
             <Button
               variation="primary"
               borderRadius="2rem"

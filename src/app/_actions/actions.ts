@@ -129,6 +129,48 @@ export const isUserTheOwnerOfCommunity = async (payload: {
   return data.data.length > 0 ? true : false;
 };
 
+export const createAnnouncement = async (payload: {
+  communityId: Schema["Community"]["type"]["id"];
+  title: Schema["Announcement"]["type"]["title"];
+  content: Schema["Announcement"]["type"]["content"];
+  tags: Schema["Announcement"]["type"]["tags"];
+}) => {
+  const { data } = await cookieBasedClient.models.Announcement.create({
+    communityId: payload.communityId,
+    title: payload.title,
+    content: payload.content,
+    tags: payload.tags,
+    likeCount: 0,
+  });
+
+  console.log(data);
+};
+
+export const getAllAnnouncementsForCommunity = async (payload: {
+  communityId: Schema["Community"]["type"]["id"];
+}) => {
+  const data = await cookieBasedClient.models.Announcement.list({
+    filter: {
+      communityId: {
+        eq: payload.communityId,
+      },
+    },
+    authMode: "apiKey",
+    selectionSet: [
+      "communityId",
+      "title",
+      "likeCount",
+      "content",
+      "tags",
+      "communityId",
+      "createdAt",
+      "community.*",
+    ],
+  });
+
+  return data.data;
+};
+
 export const fetchAuthenticatedUser = async () => {
   try {
     const data = await getAuthenticatedUser();

@@ -5,6 +5,7 @@ import UpdateCommunityForm from "./theme/UpdateCommunityForm";
 import CommunityInfo from "./CommunityInfo";
 import DeleteCommunity from "./theme/DeleteCommunity";
 import { useState } from "react";
+import Announcements from "./Announcements";
 
 const Tab = ({
   communityId,
@@ -17,6 +18,7 @@ const Tab = ({
 }) => {
   const [tab, setTab] = useState("Tab 1");
   const [communityInfoState, setCommunityInfoState] = useState(false);
+  const [announcementInfoState, setAnnouncementInfoState] = useState(false);
 
   return (
     <>
@@ -38,15 +40,23 @@ const Tab = ({
             communityId={communityId}
           />
         </Tabs.Panel>
-        <Tabs.Panel value="Tab 2">Tab 1 content</Tabs.Panel>
+        <Tabs.Panel value="Tab 2">
+          <Announcements
+            announcementInfoState={announcementInfoState}
+            communityId={communityId}
+            user={user}
+            owner={owner}
+          />
+        </Tabs.Panel>
         {owner === true ? (
           <Tabs.Panel value="Tab 3">
             <UpdateCommunityForm
               loggedUser={user}
               communityId={communityId}
-              onSubmitForm={() => {
-                setTab("Tab 1");
-                setCommunityInfoState(!communityInfoState);
+              onSubmitForm={(e) => {
+                setTab(e);
+                if (e == "Tab 1") setCommunityInfoState(!communityInfoState);
+                else setAnnouncementInfoState(!announcementInfoState);
               }}
             />
             <DeleteCommunity communityId={communityId} />
