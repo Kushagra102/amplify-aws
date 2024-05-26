@@ -3,6 +3,7 @@ import { Alert, Tabs } from '@aws-amplify/ui-react';
 import { AuthUser } from 'aws-amplify/auth';
 import UpdateCommunityForm from './theme/UpdateCommunityForm';
 import CommunityInfo from './CommunityInfo';
+import DeleteCommunity from './theme/DeleteCommunity';
 
 const Tab = ({ communityId, user, owner }: { communityId: string, user: AuthUser | null, owner: boolean }) => {
   return <>
@@ -21,6 +22,7 @@ const Tab = ({ communityId, user, owner }: { communityId: string, user: AuthUser
       {owner===true ?
         <Tabs.Panel value="Tab 3">
           <UpdateCommunityForm loggedUser={user} communityId={communityId} />
+          <DeleteCommunity communityId={communityId} />          
         </Tabs.Panel>
         :
         <Tabs.Panel value="Tab 3" isDisabled>

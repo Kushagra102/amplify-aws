@@ -51,7 +51,7 @@ export const getCommunityById = async (payload: {
       },
     },
     selectionSet: ["name", "id", "description", "owner", "banner", "createdAt"],
-    authMode: "userPool",
+    authMode: "apiKey",
   });
 
   return data.data[0];
@@ -88,6 +88,14 @@ export const updateCommunity = async (payload: {
   console.log(data);
 };
 
+export const deleteCommunity = async (payload: {
+  id: Schema["Community"]["type"]["id"];
+}) => {
+  const { data } = await cookieBasedClient.models.Community.delete({
+    id: payload.id,
+  });
+};
+
 export const isUserPartOfCommunity = async (payload: {
   userId: Schema["User"]["type"]["id"];
   communityId: Schema["Community"]["type"]["id"];
@@ -112,7 +120,7 @@ export const isUserTheOwnerOfCommunity = async (payload: {
   communityId: Schema["Community"]["type"]["id"];
 }) => {
   const data = await cookieBasedClient.models.Community.list({
-    authMode: "userPool",
+    authMode: "apiKey",
   });
   data.data = data.data.filter(
     (community) =>
