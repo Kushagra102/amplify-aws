@@ -1,5 +1,6 @@
 import type { PostConfirmationTriggerHandler } from "aws-lambda";
 import nodemailer from "nodemailer";
+import { env } from "$amplify/env/welcome-email";
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
   try {
@@ -12,8 +13,8 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
       requireTLS: true,
       secureConnection: false,
       auth: {
-        user: "geoffreyantoignatius@gmail.com",
-        pass: "pqetzsbtlrklhmbu",
+        user: (env as any).EMAIL_ID,
+        pass: (env as any).EMAIL_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false,
@@ -21,9 +22,9 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
     });
 
     var mailOptions = {
-      from: "geoffreyantoignatius@gmail.com",
+      from: (env as any).EMAIL_ID,
       to: email,
-      subject: "Welcome to XXXXXX!",
+      subject: "Welcome to Community Central!",
       html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -102,7 +103,7 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
                   <p>Best regards,<br>The Team</p>
               </div>
               <div class="footer">
-                  <p>&copy; 2024 [Your Platform]. All rights reserved.</p>
+                  <p>&copy; 2024 Community Central. All rights reserved.</p>
                   <p>1234 Your Street, Your City, ST 12345</p>
               </div>
           </div>
